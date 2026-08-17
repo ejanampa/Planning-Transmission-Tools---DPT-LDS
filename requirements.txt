@@ -1,10 +1,6 @@
 streamlit
-pandas
 geopandas
-shapely
 folium
 streamlit-folium
 openpyxl
 matplotlib
-numpy
-fiona
