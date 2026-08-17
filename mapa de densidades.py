@@ -17,7 +17,10 @@ from shapely.geometry import box
 st.set_page_config(layout="wide", page_title="Mapa de Densidad Eléctrica Multianual")
 st.title("⚡ Mapa de Densidad de Carga Eléctrica (MW/km²)")
 
-PATH_DIR = r"D:\ejanampa\01.Eddy\2026\01.ModPIT\Mapa de Densidades"
+# --- CAMBIO CLAVE PARA STREAMLIT CLOUD ---
+# Busca los archivos en el propio directorio del repositorio en lugar de una ruta absoluta local (D:\...)
+PATH_DIR = os.path.dirname(os.path.abspath(__file__))
+
 FILE_EXCEL = "GuiaSED_Dic2025.xlsx"
 FILE_GPKG = "Radio SETs.gpkg"
 HOJA_EXCEL = "SED"
@@ -65,7 +68,7 @@ def cargar_y_procesar_datos_base(folder_path):
     gpkg_path = os.path.join(folder_path, FILE_GPKG)
 
     if not os.path.exists(excel_path) or not os.path.exists(gpkg_path):
-        st.error(f"No se encontraron los archivos especificados en: {folder_path}")
+        st.error(f"No se encontraron los archivos requeridos ({FILE_EXCEL} / {FILE_GPKG}) en el repositorio.")
         return None, None
 
     gdf_concesion = gpd.read_file(gpkg_path)
@@ -121,17 +124,14 @@ def obtener_grilla_y_matriz_espacial(_gdf_concesion_utm, _gdf_nodos_utm, step=10
 def exportar_pdf(_gdf_grid, _gdf_concesion, col_demanda):
     fig, ax = plt.subplots(figsize=(8, 8))
 
-    # 1. Dibujar Límite Concesión
     _gdf_concesion.plot(ax=ax, facecolor='none', edgecolor='black', linewidth=1.2, zorder=1)
 
-    # 2. Dibujar Cuadrículas coloreadas según la paleta web
     grid_pdf = _gdf_grid.copy()
     grid_pdf['color_hex'] = grid_pdf['Densidad_MW_km2'].apply(obtener_color_densidad)
 
     for hex_c, group in grid_pdf.groupby('color_hex'):
         group.plot(ax=ax, facecolor=hex_c, edgecolor='#444444', linewidth=0.3, alpha=0.65, zorder=2)
 
-    # Leyenda compacta (sin nodos)
     legend_elements = [
         mpatches.Patch(facecolor='#FF0000', edgecolor='gray', alpha=0.7, label='Muy Alta (d ≥ 4.0)'),
         mpatches.Patch(facecolor='#FF8C00', edgecolor='gray', alpha=0.7, label='Alta (4.0 > d ≥ 2.5)'),
@@ -155,15 +155,14 @@ def exportar_pdf(_gdf_grid, _gdf_concesion, col_demanda):
     )
 
     ax.set_title(f"Mapa de Densidad de Carga Eléctrica\nDemanda: {col_demanda}", fontsize=10, fontweight='bold', pad=8)
-    ax.set_xlabel("UTM Este (m)", fontsize=7.5)
-    ax.set_ylabel("UTM Norte (m)", fontsize=7.5)
+    ax.set_xlabel("UTM Este (m)", fontsize=8)
+    ax.set_ylabel("UTM Norte (m)", fontsize=8)
 
-    # Desactivar 1e6 y dar formato plano a coordenadas
     ax.ticklabel_format(style='plain', useOffset=False)
     ax.tick_params(
         axis='both', 
         which='major', 
-        labelsize=5.5,
+        labelsize=7.5,
         top=False, 
         labeltop=False
     )
