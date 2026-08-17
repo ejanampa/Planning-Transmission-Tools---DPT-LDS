@@ -429,13 +429,29 @@ if gdf_concesion_utm is not None and gdf_nodos_utm is not None:
     folium.LayerControl(position='topright').add_to(m)
 
     legend_html = '''
-    <div style="position: fixed; bottom: 30px; left: 30px; width: 220px; background-color: white; border:2px solid grey; z-index:9999; font-size:12px; padding: 10px; border-radius: 5px;">
-    <b>Rango Densidad (MW/km²)</b><br>
-    <i style="background:#FF0000; width: 12px; height: 12px; float: left; margin-right: 8px;"></i> Muy Alta (d ≥ 4.0)<br>
-    <i style="background:#FF8C00; width: 12px; height: 12px; float: left; margin-right: 8px;"></i> Alta (4.0 > d ≥ 2.5)<br>
-    <i style="background:#0000FF; width: 12px; height: 12px; float: left; margin-right: 8px;"></i> Media (2.5 > d ≥ 1.5)<br>
-    <i style="background:#008000; width: 12px; height: 12px; float: left; margin-right: 8px;"></i> Baja (1.5 > d ≥ 0.25)<br>
-    <i style="background:#FFFF00; width: 12px; height: 12px; float: left; margin-right: 8px;"></i> Muy Baja (d < 0.25)<br>
+    <div style="
+        position: fixed; 
+        bottom: 25px; 
+        left: 15px; 
+        width: 200px; 
+        background-color: #ffffff !important; 
+        color: #000000 !important; 
+        border: 2px solid #555555; 
+        z-index: 99999; 
+        font-size: 11px; 
+        font-family: sans-serif;
+        padding: 8px 10px; 
+        border-radius: 6px;
+        box-shadow: 0px 2px 6px rgba(0,0,0,0.3);
+    ">
+    <b style="color: #000000 !important; font-size: 11px;">Rango Densidad (MW/km²)</b><br>
+    <div style="margin-top: 4px; color: #000000 !important;">
+        <i style="background:#FF0000; width: 12px; height: 12px; float: left; margin-right: 8px; border: 1px solid #333;"></i> <span style="color: #000000 !important;">Muy Alta (d ≥ 4.0)</span><br>
+        <i style="background:#FF8C00; width: 12px; height: 12px; float: left; margin-right: 8px; border: 1px solid #333;"></i> <span style="color: #000000 !important;">Alta (4.0 > d ≥ 2.5)</span><br>
+        <i style="background:#0000FF; width: 12px; height: 12px; float: left; margin-right: 8px; border: 1px solid #333;"></i> <span style="color: #000000 !important;">Media (2.5 > d ≥ 1.5)</span><br>
+        <i style="background:#008000; width: 12px; height: 12px; float: left; margin-right: 8px; border: 1px solid #333;"></i> <span style="color: #000000 !important;">Baja (1.5 > d ≥ 0.25)</span><br>
+        <i style="background:#FFFF00; width: 12px; height: 12px; float: left; margin-right: 8px; border: 1px solid #333;"></i> <span style="color: #000000 !important;">Muy Baja (d < 0.25)</span><br>
+    </div>
     </div>
     '''
     m.get_root().html.add_child(folium.Element(legend_html))
